@@ -45,6 +45,15 @@ chmod +x k8s-preflight
 
 Exit codes: `0` all passed, `1` warnings only, `2` at least one failure. That makes it easy to gate a CI job or an upgrade runbook on it.
 
+## Container image
+
+A `Dockerfile` is included (Alpine, bash, kubectl, openssl). See [README_DOCKERHUB.md](README_DOCKERHUB.md):
+
+```bash
+docker build -t k8s-preflight .
+docker run --rm -v "$HOME/.kube/config:/kube/config:ro" -e KUBECONFIG=/kube/config k8s-preflight --target 1.35
+```
+
 ## Sample output
 
 From the test scenario in `test/fixtures/scenario.sh` (a Kubernetes v1.34.1 API server seeded with a lagging node, a containerd 1.7 node, a blocking PDB and a few other classics):
